@@ -1,0 +1,6 @@
+# Compiled python files
+*.pyc
+
+# Database & weights
+*.h5
+

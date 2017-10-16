@@ -59,9 +59,9 @@ def siamRD(model_parameters_path="model_parameters.json",
         batch_per_epoch = model_data["batch_per_epoch"]
         epochs = model_data["epochs"]
         batch_per_valid = model_data["batch_per_valid"]
-        with h5py.File(model_data["dataset_path"], "r") as f:
-            histo = train_model(model, f, batch_size=batch_size, steps_per_epoch=batch_per_epoch, epochs=epochs, validation_steps=batch_per_valid)
-
+        # with h5py.File(model_data["dataset_path"], "r") as f:
+        #    histo = train_model(model, f, batch_size=batch_size, steps_per_epoch=batch_per_epoch, epochs=epochs, validation_steps=batch_per_valid)
+        print("training")
 
     # Test
     if b_test_model:

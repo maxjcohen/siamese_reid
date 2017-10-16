@@ -1,6 +1,6 @@
 {
     "weights_file": "weights_loic.h5",
-    "dataset_path": "/home/mrmojo/Documents/bigbrother/BigBrother/src/WP4/dataset/cuhk03/cuhk-03.h5",
+    "dataset_path": "cuhk03.h5",
 
     "batch_size": 16,
     "batch_per_epoch": 5,
