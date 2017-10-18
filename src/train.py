@@ -49,7 +49,7 @@ def train_model(model,
                 verbose=1,
                 validation_steps=10,
                 initial_epoch=0):
-
+    
     modelCheckpoint = ModelCheckpoint(
                                         filepath="weights/weights_{epoch:02d}_{val_loss:.2f}.hdf5",
                                         monitor='val_loss',
@@ -60,7 +60,7 @@ def train_model(model,
                                         period=1
     )
     logger = Logger(steps_per_epoch=steps_per_epoch, batch_size=batch_size)
-
+    
     Data_Generator = ImageDataGenerator_for_multiinput(width_shift_range=0.05,
                                                         height_shift_range=0.05)
 
@@ -73,7 +73,8 @@ def train_model(model,
                                         train_or_validation='validation',
                                         flag=0,
                                         batch_size=batch_size)
-
+    
+    
     hist = model.fit_generator(generator=generator_train,
                                 steps_per_epoch=steps_per_epoch,
                                 epochs=epochs,
@@ -81,7 +82,7 @@ def train_model(model,
                                 validation_data=generator_val,
                                 validation_steps=validation_steps,
                                 initial_epoch=initial_epoch,
-                                callbacks=[modelCheckpoint, logger]
+                                callbacks=[modelCheckpoint, logger],
     )
 
     return hist

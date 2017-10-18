@@ -3,4 +3,10 @@
 
 # Database & weights
 *.h5
+*.hdf5
 
+# Logs
+*.csv
+
+# Jupyter checkpoints
+.ipynb_checkpoints

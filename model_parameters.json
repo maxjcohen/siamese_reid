@@ -1,11 +1,11 @@
 {
-    "weights_file": "weights_loic.h5",
+    "weights_file": "weights_save.h5",
     "dataset_path": "cuhk03.h5",
 
-    "batch_size": 16,
-    "batch_per_epoch": 5,
+    "batch_size": 64,
+    "batch_per_epoch": 100,
     "epochs": 3,
-    "batch_per_valid": 1,
+    "batch_per_valid": 10,
 
     "input_folder": "/home/mrmojo/Documents/bigbrother/BigBrother/src/WP4/dataset/cuhk03/input",
     "output_folder":"/home/mrmojo/Documents/bigbrother/BigBrother/src/WP4/dataset/cuhk03/output"

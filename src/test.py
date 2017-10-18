@@ -63,7 +63,7 @@ def _get_test_data_new():
     return cameraA, cameraB
 
 def _get_test_data(h5pyfile='cuhk-03.h5', val_or_test='test'):
-    h5pyfile = os.path.join(wp4_path, 'dataset/cuhk03/cuhk-03.h5')
+    h5pyfile = "cuhk03.h5"
     with h5py.File(h5pyfile, 'r') as ff:
         a = np.array([ff['a'][val_or_test][str(i)][0] for i in range(100)])
         b = np.array([ff['b'][val_or_test][str(i)][0] for i in range(100)])

@@ -11,7 +11,7 @@ from matplotlib import pyplot as plt
 
 from src.model import generate_model, compile_model
 from src.train import train_model
-from src.test import test_model
+from src.test import test_model, cmc
 
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
@@ -29,9 +29,8 @@ def siamRD(model_parameters_path="model_parameters.json",
             b_train_model=False,
             b_test_model=False,
             verbose=True):
-
     if not verbose:
-        # avoid printing TF debugging information
+        # Avoid printing TF debugging information
         os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
     # Read infos from json
@@ -59,15 +58,15 @@ def siamRD(model_parameters_path="model_parameters.json",
         batch_per_epoch = model_data["batch_per_epoch"]
         epochs = model_data["epochs"]
         batch_per_valid = model_data["batch_per_valid"]
-        # with h5py.File(model_data["dataset_path"], "r") as f:
-        #    histo = train_model(model, f, batch_size=batch_size, steps_per_epoch=batch_per_epoch, epochs=epochs, validation_steps=batch_per_valid)
-        print("training")
+        with h5py.File(model_data["dataset_path"], "r") as f:
+            histo = train_model(model, f, batch_size=batch_size, steps_per_epoch=batch_per_epoch, epochs=epochs, validation_steps=batch_per_valid)
 
     # Test
     if b_test_model:
-        input_folder = model_data["input_folder"]
-        output_folder = model_data["output_folder"]
-        test_model(model)
+        #input_folder = model_data["input_folder"]
+        #output_folder = model_data["output_folder"]
+        #test_model(model)
+        cmc(model)
 
 if __name__ == '__main__':
     siamRD()
