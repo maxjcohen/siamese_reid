@@ -8,7 +8,7 @@ import h5py
 from keras.models import Model
 from matplotlib import pyplot as plt
 
-from src.model import generate_model, compile_model
+from src.model import generate_model
 from src.train import train_model
 from src.test import test_model, cmc
 
@@ -17,6 +17,7 @@ os.environ["CUDA_VISIBLE_DEVICES"]="0"
 def siamRD(model_parameters_path="model_parameters.json",
             b_load_weights=False,
             b_train_model=False,
+            b_test_model=False):
 
     # Read infos from json
     with open(model_parameters_path, "r") as f:
