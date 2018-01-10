@@ -25,9 +25,6 @@ def siamRD(model_parameters_path="model_parameters.json",
 
     # Generate model
     model = generate_model()
-    model = compile_model(model)
-    if verbose:
-        model.summary()
 
     # Load weights
     if b_load_weights:
@@ -36,11 +33,11 @@ def siamRD(model_parameters_path="model_parameters.json",
     # Train
     if b_train_model:
         batch_size = model_data["batch_size"]
-        batch_per_epoch = model_data["batch_per_epoch"]
+        steps_per_epoch = model_data["steps_per_epoch"]
         epochs = model_data["epochs"]
-        batch_per_valid = model_data["batch_per_valid"]
-        with h5py.File(model_data["dataset_path"], "r") as f:
-            histo = train_model(model, f, batch_size=batch_size, steps_per_epoch=batch_per_epoch, epochs=epochs, validation_steps=batch_per_valid)
+        validation_steps = model_data["validation_steps"]
+
+        histo = train_model(model, batch_size=batch_size, steps_per_epoch=steps_per_epoch, epochs=epochs, validation_steps=validation_steps)
 
     # Test
     if b_test_model:

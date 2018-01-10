@@ -3,10 +3,7 @@
     "dataset_path": "cuhk03.h5",
 
     "batch_size": 64,
-    "batch_per_epoch": 100,
+    "steps_per_epoch": 100,
     "epochs": 3,
-    "batch_per_valid": 10,
-
-    "input_folder": "/home/mrmojo/Documents/bigbrother/BigBrother/src/WP4/dataset/cuhk03/input",
-    "output_folder":"/home/mrmojo/Documents/bigbrother/BigBrother/src/WP4/dataset/cuhk03/output"
+    "validation_steps": 10
 }
