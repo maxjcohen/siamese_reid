@@ -14,7 +14,6 @@ np.random.seed(1217)
 import h5py
 from PIL import Image
 from keras.preprocessing import image as pre_image
-import cv2
 
 class NumpyArrayIterator_for_CUHK03(pre_image.Iterator):
 

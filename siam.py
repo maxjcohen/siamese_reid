@@ -4,7 +4,6 @@ import os
 import json
 
 import numpy as np
-import cv2
 import h5py
 from keras.models import Model
 from matplotlib import pyplot as plt
