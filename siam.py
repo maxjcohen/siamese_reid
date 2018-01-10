@@ -14,28 +14,11 @@ from src.test import test_model, cmc
 
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
-def siamBigBro(b_gen_model=False, **goliath_args):
-    if b_gen_model:
-        model = generate_model()
-        model = compile_model(model)
-        return model
-
-    return goliath(**goliath_args)
-
-
 def siamRD(model_parameters_path="model_parameters.json",
             b_load_weights=False,
             b_train_model=False,
-            b_test_model=False,
-            verbose=True):
-    if not verbose:
-        # Avoid printing TF debugging information
-        os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
     # Read infos from json
-    if verbose:
-        print("Reading infos from {} .".format(model_parameters_path))
-
     with open(model_parameters_path, "r") as f:
         model_data = json.loads(f.read())
 
@@ -48,8 +31,6 @@ def siamRD(model_parameters_path="model_parameters.json",
     # Load weights
     if b_load_weights:
         model.load_weights(os.path.join("weights", model_data["weights_file"]))
-        if verbose:
-            print("Loaded weights/{} .".format(model_data["weights_file"]))
 
     # Train
     if b_train_model:
@@ -62,9 +43,6 @@ def siamRD(model_parameters_path="model_parameters.json",
 
     # Test
     if b_test_model:
-        #input_folder = model_data["input_folder"]
-        #output_folder = model_data["output_folder"]
-        #test_model(model)
         cmc(model)
 
 if __name__ == '__main__':

@@ -14,5 +14,4 @@ def parse_args():
     args = parser.parse_args()
     return args
 
-
-siamRD(b_load_weights=False, b_train_model=False, b_test_model=True, verbose=False)
+siamRD(b_load_weights=False, b_train_model=False, b_test_model=False)
