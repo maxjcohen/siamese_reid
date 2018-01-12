@@ -1,13 +1,13 @@
 import os
 import shutil
 
-import cv2
+# import cv2
 from PIL import Image
 import numpy as np
 import h5py
 from matplotlib import pyplot as plt
 
-from src.model import generate_model, compile_model
+from src.model import generate_model
 from src.goliath import goliath
 
 module_path = os.path.dirname(os.path.abspath(__file__))
