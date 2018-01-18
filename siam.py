@@ -10,7 +10,7 @@ from matplotlib import pyplot as plt
 
 from src.model import generate_model
 from src.train import train_model
-from src.test import test_model, cmc
+from src.test import cmc
 
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
@@ -44,4 +44,4 @@ def siamRD(model_parameters_path="model_parameters.json",
         cmc(model)
 
 if __name__ == '__main__':
-    siamRD()
+    siamRD(b_test_model=True)
