@@ -35,5 +35,30 @@ def trainGenerator(database="cuhk.h5", batch_size=32):
 
             yield [batch_x_1, batch_x_2], batch_y
 
+def validationGenerator(database="cuhk.h5", batch_size=32):
+    # Open database
+    with h5py.File(database, "r") as db:
+        n_ids = len(db["validation"])
+
+        while True:
+            batch_x_1 = np.zeros((batch_size, 160, 60, 3))
+            batch_x_2 = np.zeros((batch_size, 160, 60, 3))
+            batch_y = np.zeros((batch_size, 2))
+
+            for index in range(batch_size):
+                pair_ids = np.random.choice(n_ids, 2, replace=True)
+                pair_a = np.random.choice(len(db["validation"][str(pair_ids[0])]))
+                pair_b = np.random.choice(len(db["validation"][str(pair_ids[1])]))
+
+
+                batch_x_1[index] = db["validation"][str(pair_ids[0])][pair_a]
+                batch_x_2[index] = db["validation"][str(pair_ids[1])][pair_b]
+
+                label = (pair_a == pair_b)
+                batch_y[index] = [(not label), label]
+
+            yield [batch_x_1, batch_x_2], batch_y
+
+
 if __name__ == '__main__':
     trainGenerator()
