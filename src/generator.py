@@ -7,7 +7,8 @@ def trainGenerator(database="cuhk.h5", batch_size=32):
         n_ids = len(db["train"])
 
         while True:
-            batch_x = np.zeros((batch_size, 2, 160, 60, 3))
+            batch_x_1 = np.zeros((batch_size, 160, 60, 3))
+            batch_x_2 = np.zeros((batch_size, 160, 60, 3))
             batch_y = np.zeros((batch_size, 2))
 
             # Choose positive or negative pair
@@ -18,8 +19,8 @@ def trainGenerator(database="cuhk.h5", batch_size=32):
                     pair_id = np.random.choice(n_ids)
                     pair_a, pair_b = np.random.choice(len(db["train"][str(pair_id)]), size=2, replace=False)
 
-                    batch_x[index][0] = db["train"][str(pair_id)][pair_a]
-                    batch_x[index][1] = db["train"][str(pair_id)][pair_b]
+                    batch_x_1[index] = db["train"][str(pair_id)][pair_a]
+                    batch_x_2[index] = db["train"][str(pair_id)][pair_b]
                     batch_y[index] = [0, 1]
 
                 else:
@@ -28,11 +29,11 @@ def trainGenerator(database="cuhk.h5", batch_size=32):
                     pair_b = np.random.choice(len(db["train"][str(pair_ids[1])]))
 
 
-                    batch_x[index][0] = db["train"][str(pair_ids[0])][pair_a]
-                    batch_x[index][1] = db["train"][str(pair_ids[1])][pair_b]
+                    batch_x_1[index] = db["train"][str(pair_ids[0])][pair_a]
+                    batch_x_2[index] = db["train"][str(pair_ids[1])][pair_b]
                     batch_y[index] = [1, 0]
 
-            yield batch_x, batch_y
+            yield [batch_x_1, batch_x_2], batch_y
 
 if __name__ == '__main__':
     trainGenerator()
