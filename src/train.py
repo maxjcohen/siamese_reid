@@ -11,7 +11,7 @@ class Logger(Callback):
     def __init__(self, steps_per_epoch=None, batch_size=None):
         # Init logger
         self.csvfile = open("logs/logs.csv", "a")
-        fieldnames = ["time", "epoch", "loss (val)", "acc (val)", "loss", "acc", "steps_per_epoch", "batch_size", "lr", "momentum", "decay"]
+        fieldnames = ["time", "epoch", "loss (val)", "steps_per_epoch", "batch_size", "lr", "decay"]
         self.writer = csv.DictWriter(self.csvfile, fieldnames=fieldnames)
 
         self.steps_per_epoch = steps_per_epoch
@@ -27,9 +27,6 @@ class Logger(Callback):
                     "time": current_time,
                     "epoch": epoch,
                     "loss (val)": logs.get("val_loss"),
-                    "acc (val)": logs.get("val_categorical_accuracy"),
-                    "loss": logs.get("categorical_accuracy"),
-                    "acc":logs.get("loss"),
                     "steps_per_epoch": self.steps_per_epoch,
                     "batch_size": self.batch_size,
                     "lr": K.eval(optimizer.lr),
@@ -50,6 +47,8 @@ def train_model(model,
                 validation_steps=10,
                 initial_epoch=0):
     
+
+    # Loggers
     modelCheckpoint = ModelCheckpoint(
                                         filepath="weights/weights_{epoch:02d}_{val_loss:.2f}.hdf5",
                                         monitor='val_loss',
