@@ -9,8 +9,8 @@ import matplotlib.pyplot as plt
 def parse_args():
     """Parse input arguments."""
     parser = argparse.ArgumentParser(description='Main Script.')
-    parser.add_argument('--convert', dest='dataset_path', help='convert original dataset to format.')
-    parser.add_argument('--load_weights', action='store_true', help='Loads weightself.')
+    parser.add_argument('--convert', dest='dataset_path', help='Convert original dataset to format.')
+    parser.add_argument('--load_weights', action='store_true', help='Loads weights.')
     parser.add_argument('--train', action='store_true', help='Trains the network.')
     parser.add_argument('--test', action='store_true', help='Test the network.')
     parser.add_argument('--no_ui', action='store_true', help='No graphic interface.')
