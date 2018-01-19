@@ -1,15 +1,14 @@
 import numpy as np
 import h5py
 from matplotlib import pyplot as plt
+import tqdm
 
 def cmc(model, no_ui):
     test_batch, n_ids = _getTestData()
 
     ranks = np.zeros(n_ids)
     # Compute ranks
-    for index, image in enumerate(test_batch):
-        print("Current id: {}\r".format(index), end="")
-
+    for index, image in tqdm.tqdm(list(enumerate(test_batch))):
         batch_x1 = np.full((n_ids, 160, 60, 3), image)
 
         netout = model.predict_on_batch([batch_x1, test_batch])
@@ -18,7 +17,6 @@ def cmc(model, no_ui):
         # Get rank number for this person
         n_rank = np.argwhere(np.argsort(distances) == index)[0, 0]
         ranks[n_rank:] += 1
-    print()
 
     if not no_ui:
         # Plot
