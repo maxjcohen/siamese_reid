@@ -2,7 +2,7 @@ import numpy as np
 import h5py
 from matplotlib import pyplot as plt
 
-def cmc(model):
+def cmc(model, no_ui):
     test_batch, n_ids = _getTestData()
 
     ranks = np.zeros(n_ids)
@@ -20,12 +20,13 @@ def cmc(model):
         ranks[n_rank:] += 1
     print()
 
-    # Plot
-    ranks = ranks / n_ids
-    plt.plot(ranks)
-    for index, value in enumerate(ranks):
-        plt.annotate("rg{}: {:.2f}".format(index+1, value), (index, value), xytext=(index+1.7, value-0.02))
-    plt.show()
+    if not no_ui:
+        # Plot
+        ranks = ranks / n_ids
+        plt.plot(ranks)
+        for index, value in enumerate(ranks):
+            plt.annotate("rg{}: {:.2f}".format(index+1, value), (index, value), xytext=(index+1.7, value-0.02))
+        plt.show()
 
     return ranks
 

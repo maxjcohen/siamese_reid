@@ -17,7 +17,8 @@ os.environ["CUDA_VISIBLE_DEVICES"]="0"
 def siamRD(model_parameters_path="model_parameters.json",
             b_load_weights=False,
             b_train_model=False,
-            b_test_model=False):
+            b_test_model=False,
+            b_no_ui=False):
 
     # Read infos from json
     with open(model_parameters_path, "r") as f:
@@ -41,7 +42,7 @@ def siamRD(model_parameters_path="model_parameters.json",
 
     # Test
     if b_test_model:
-        cmc(model)
+        cmc(model, b_no_ui)
 
 if __name__ == '__main__':
     siamRD(b_test_model=True)
