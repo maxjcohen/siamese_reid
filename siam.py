@@ -1,7 +1,6 @@
 from __future__ import division, print_function
 
 import os
-import json
 
 import numpy as np
 import h5py
@@ -14,15 +13,12 @@ from src.test import cmc
 
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
-def siamRD(model_parameters_path="model_parameters.json",
+def siamRD(model_data,
             b_load_weights=False,
             b_train_model=False,
             b_test_model=False,
             b_no_ui=False):
 
-    # Read infos from json
-    with open(model_parameters_path, "r") as f:
-        model_data = json.loads(f.read())
 
     # Generate model
     model = generate_model()
@@ -38,11 +34,8 @@ def siamRD(model_parameters_path="model_parameters.json",
         epochs = model_data["epochs"]
         validation_steps = model_data["validation_steps"]
 
-        histo = train_model(model, batch_size=batch_size, steps_per_epoch=steps_per_epoch, epochs=epochs, validation_steps=validation_steps)
+        histo = train_model(model, dataset=model_data["dataset_path"], batch_size=batch_size, steps_per_epoch=steps_per_epoch, epochs=epochs, validation_steps=validation_steps)
 
     # Test
     if b_test_model:
         cmc(model, b_no_ui)
-
-if __name__ == '__main__':
-    siamRD(b_test_model=True)

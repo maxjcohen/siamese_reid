@@ -40,6 +40,7 @@ class Logger(Callback):
         self.csvfile.close()
 
 def train_model(model,
+                dataset,
                 batch_size=32,
                 steps_per_epoch=100,
                 epochs=10,
@@ -61,8 +62,8 @@ def train_model(model,
     logger = Logger(steps_per_epoch=steps_per_epoch, batch_size=batch_size)
 
     # Generators
-    generator_train = trainGenerator(batch_size=batch_size)
-    generator_val = validationGenerator(batch_size=batch_size)
+    generator_train = trainGenerator(database=dataset, batch_size=batch_size)
+    generator_val = validationGenerator(database=dataset, batch_size=batch_size)
 
 
     hist = model.fit_generator(generator=generator_train,
