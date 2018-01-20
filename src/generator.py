@@ -5,10 +5,11 @@ def trainGenerator(database="cuhk.h5", batch_size=32):
     # Open database
     with h5py.File(database, "r") as db:
         n_ids = len(db["train"])
+        image_shape = db["train"]["0"].shape[1:]
 
         while True:
-            batch_x_1 = np.zeros((batch_size, 160, 60, 3))
-            batch_x_2 = np.zeros((batch_size, 160, 60, 3))
+            batch_x_1 = np.zeros((batch_size, *image_shape))
+            batch_x_2 = np.zeros((batch_size, *image_shape))
             batch_y = np.zeros((batch_size, 2))
 
             # Choose positive or negative pair
@@ -39,10 +40,11 @@ def validationGenerator(database="cuhk.h5", batch_size=32):
     # Open database
     with h5py.File(database, "r") as db:
         n_ids = len(db["validation"])
+        image_shape = db["validation"]["0"].shape[1:]
 
         while True:
-            batch_x_1 = np.zeros((batch_size, 160, 60, 3))
-            batch_x_2 = np.zeros((batch_size, 160, 60, 3))
+            batch_x_1 = np.zeros((batch_size, *image_shape))
+            batch_x_2 = np.zeros((batch_size, *image_shape))
             batch_y = np.zeros((batch_size, 2))
 
             for index in range(batch_size):
