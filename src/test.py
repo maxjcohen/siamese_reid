@@ -9,7 +9,7 @@ def cmc(model, no_ui):
     ranks = np.zeros(n_ids)
     # Compute ranks
     for index, image in tqdm.tqdm(list(enumerate(test_batch))):
-        batch_x1 = np.full((n_ids, 160, 60, 3), image)
+        batch_x1 = np.full((n_ids, *image.shape), image)
 
         netout = model.predict_on_batch([batch_x1, test_batch])
         distances = netout.T[0]
@@ -35,8 +35,9 @@ def _getTestData(database="cuhk.h5"):
     # Open database
     with h5py.File(database, "r") as db:
         n_ids = len(db["test"])
+        image_shape = db["validation"]["0"].shape[1:]
 
-        test_batch = np.zeros((n_ids, 160, 60, 3))
+        test_batch = np.zeros((n_ids, *image_shape))
 
         for index in range(n_ids):
             test_batch[index] = db["test"][str(index)][0]
