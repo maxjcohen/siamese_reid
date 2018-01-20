@@ -38,4 +38,4 @@ def siamRD(model_data,
 
     # Test
     if b_test_model:
-        cmc(model, b_no_ui)
+        cmc(model, b_no_ui, model_data["dataset_path"])

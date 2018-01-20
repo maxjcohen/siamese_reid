@@ -3,8 +3,8 @@ import h5py
 from matplotlib import pyplot as plt
 import tqdm
 
-def cmc(model, no_ui):
-    test_batch, n_ids = _getTestData()
+def cmc(model, no_ui, database="cuhk.h5"):
+    test_batch, n_ids = _getTestData(database)
 
     ranks = np.zeros(n_ids)
     # Compute ranks
