@@ -18,9 +18,10 @@ def cmc(model, no_ui):
         n_rank = np.argwhere(np.argsort(distances) == index)[0, 0]
         ranks[n_rank:] += 1
 
+    ranks = ranks / n_ids
+
     if not no_ui:
         # Plot
-        ranks = ranks / n_ids
         plt.plot(ranks)
         for index, value in enumerate(ranks):
             plt.annotate("rg{}: {:.2f}".format(index+1, value), (index, value), xytext=(index+1.7, value-0.02))
