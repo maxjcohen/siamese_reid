@@ -7,9 +7,9 @@ import h5py
 from keras.models import Model
 from matplotlib import pyplot as plt
 
-from src.model import generate_model
+from src.model_caps import generate_model
 from src.train import train_model
-from src.test import cmc
+from src.test import cmc, test
 
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
@@ -21,7 +21,7 @@ def siamRD(model_data,
 
 
     # Generate model
-    model = generate_model()
+    model = generate_model(input_shape=(160, 60, 3))
 
     # Load weights
     if b_load_weights:
@@ -39,3 +39,6 @@ def siamRD(model_data,
     # Test
     if b_test_model:
         cmc(model, b_no_ui, model_data["dataset_path"])
+        # from src.generator import trainGenerator
+        # gen = trainGenerator(batch_size=32)
+        # test(gen, model)
