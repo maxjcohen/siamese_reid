@@ -4,16 +4,15 @@ from matplotlib import pyplot as plt
 import tqdm
 
 def cmc(model, no_ui, database="cuhk.h5"):
-    test_batch, n_ids = _getTestData(database)
+    test_batch_x1, test_batch_x2, n_ids = _getTestData(database)
 
     ranks = np.zeros(n_ids)
     # Compute ranks
-    for index, image in tqdm.tqdm(list(enumerate(test_batch))):
+    for index, image in tqdm.tqdm(list(enumerate(test_batch_x1))):
         batch_x1 = np.full((n_ids, *image.shape), image)
 
-        netout = model.predict_on_batch([batch_x1, test_batch])
+        netout = model.predict_on_batch([batch_x1, test_batch_x2])
         distances = netout.T[0]
-
         # Get rank number for this person
         n_rank = np.argwhere(np.argsort(distances) == index)[0, 0]
         ranks[n_rank:] += 1
@@ -51,12 +50,14 @@ def test(gen, model):
 def _getTestData(database="cuhk.h5"):
     # Open database
     with h5py.File(database, "r") as db:
-        n_ids = len(db["test"])
+        n_ids = len(db["validation"])
         image_shape = db["validation"]["0"].shape[1:]
 
-        test_batch = np.zeros((n_ids, *image_shape))
+        test_batch_x1 = np.zeros((n_ids, *image_shape))
+        test_batch_x2 = np.zeros((n_ids, *image_shape))
 
         for index in range(n_ids):
-            test_batch[index] = db["test"][str(index)][0]
+            test_batch_x1[index] = db["validation"][str(index)][0]
+            test_batch_x2[index] = db["validation"][str(index)][-1]
 
-    return test_batch, n_ids
+    return test_batch_x1, test_batch_x2, n_ids
