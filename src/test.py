@@ -32,6 +32,23 @@ def cmc(model, no_ui, database="cuhk.h5"):
 
     return ranks
 
+def test(gen, model):
+    batch = next(gen)
+    distances = model.predict_on_batch(batch[0])
+    n_images = 10
+    fig = plt.figure(figsize=(20, 5))
+
+    for i in range(n_images):
+        ax = plt.subplot(2, n_images, i+1)
+        plt.imshow(batch[0][0][i])
+        ax.set_axis_off()
+        # ax.set_title(("Same" if batch[1][i][1] else "Diff"))
+        ax.set_title(str(distances[i]))
+        ax = plt.subplot(2, n_images, n_images+i+1)
+        plt.imshow(batch[0][1][i])
+        ax.set_axis_off()
+    plt.show()
+
 def _getTestData(database="cuhk.h5"):
     # Open database
     with h5py.File(database, "r") as db:
