@@ -26,9 +26,8 @@ def cmc(model, no_ui, database="cuhk.h5"):
         for index, value in enumerate(ranks):
             plt.annotate("rg{}: {:.2f}".format(index+1, value), (index, value), xytext=(index+1.7, value-0.02))
         plt.show()
-    
-    else:
-        print(ranks)
+
+    print(ranks)
 
     return ranks
 
