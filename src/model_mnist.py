@@ -10,7 +10,7 @@ from keras.optimizers import RMSprop, SGD
 from keras.callbacks import Callback
 from keras import backend as K
 
-def generate_model():
+def generate_model(input_shape=(160, 60, 3)):
 
     def buildNetwork(input_shape):
 
@@ -45,7 +45,7 @@ def generate_model():
         return K.mean(y_true * K.square(y_pred) + (1 - y_true) * K.square(K.maximum(margin - y_pred, 0)))
 
 
-    model = buildNetwork(input_shape=(28, 28, 1))
+    model = buildNetwork(input_shape=input_shape)
 
     rms = RMSprop()
     sgd = SGD(lr=0.001, momentum=0.9, decay=1e-6)
