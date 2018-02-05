@@ -34,21 +34,20 @@ if __name__ == '__main__':
 
         print("\033[1m\033[94mDone\033[0m")
 
-    if args.load_weights or args.train or args.test:
 
-        # Read parameters from json
-        with open("model_parameters.json", "r") as f:
-            model_data = json.loads(f.read())
+    # Read parameters from json
+    with open("model_parameters.json", "r") as f:
+        model_data = json.loads(f.read())
 
-        # Check db exists
-        if not os.path.isfile(model_data["dataset_path"]):
-            print("\033[1m\033[91mERROR\033[0m dataset {} not found.".format(model_data["dataset_path"]))
-            sys.exit(1)
+    # Check db exists
+    if not os.path.isfile(model_data["dataset_path"]):
+        print("\033[1m\033[91mERROR\033[0m dataset {} not found.".format(model_data["dataset_path"]))
+        sys.exit(1)
 
-        import siam
-        siam.siamRD(
-            model_data=model_data,
-            b_load_weights=args.load_weights,
-            b_train_model=args.train,
-            b_test_model=args.test,
-            b_no_ui=args.no_ui)
+    import siam
+    siam.siamRD(
+        model_data=model_data,
+        b_load_weights=args.load_weights,
+        b_train_model=args.train,
+        b_test_model=args.test,
+        b_no_ui=args.no_ui)
