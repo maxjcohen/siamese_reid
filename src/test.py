@@ -1,6 +1,5 @@
 import numpy as np
 import h5py
-from matplotlib import pyplot as plt
 import tqdm
 
 def cmc(model, no_ui, database="cuhk.h5"):
@@ -20,6 +19,7 @@ def cmc(model, no_ui, database="cuhk.h5"):
     ranks = ranks / n_ids
 
     if not no_ui:
+        from matplotlib import pyplot as plt
         # Plot
         plt.plot(ranks)
         for index, value in enumerate(ranks):
