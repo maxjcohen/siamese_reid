@@ -11,7 +11,7 @@ from keras.preprocessing.image import ImageDataGenerator
 from keras import callbacks
 import matplotlib.pyplot as plt
 from PIL import Image
-from src.capsulelayers import CapsuleLayer, PrimaryCap, Length, Mask
+from src.model.capsulelayers import CapsuleLayer, PrimaryCap, Length, Mask
 
 def generate_model(input_shape=(28, 28, 1)):
     def margin_loss(y_true, y_pred):
