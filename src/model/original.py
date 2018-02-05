@@ -10,7 +10,7 @@ from keras import backend as K
 
 import tensorflow as tf
 
-def generate_model(weight_decay=0.0005, verbose=False):
+def generate_model(weight_decay=0.0005, verbose=False, input_shape=(160, 60, 3)):
     def upsample_neighbor_function(input_x):
         input_x_pad = K.spatial_2d_padding(input_x, padding=((2,2),(2,2)))
         x_length = K.int_shape(input_x)[1]
@@ -124,7 +124,7 @@ def generate_model(weight_decay=0.0005, verbose=False):
 
     model_loss = "categorical_crossentropy"
     model_opt = model_SGD()
-    
+
     model.compile(optimizer=model_opt,
                   loss=model_loss)
 
