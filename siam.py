@@ -7,7 +7,7 @@ import h5py
 from keras.models import Model
 from matplotlib import pyplot as plt
 
-from src.model_caps import generate_model
+from src.model.caps_merge import generate_model
 from src.train import train_model
 from src.test import cmc, test
 
