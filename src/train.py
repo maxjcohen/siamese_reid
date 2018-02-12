@@ -5,9 +5,6 @@ from keras.models import Model
 from keras.callbacks import ModelCheckpoint, Callback
 from keras import backend as K
 
-from .data_creator import ImageDataGenerator_for_multiinput
-from .generator import trainGenerator, validationGenerator
-
 class Logger(Callback):
     def __init__(self, steps_per_epoch=None, batch_size=None):
         # Init logger
@@ -40,7 +37,8 @@ class Logger(Callback):
         self.csvfile.close()
 
 def train_model(model,
-                dataset,
+                generator_train,
+                generator_val,
                 batch_size=32,
                 steps_per_epoch=100,
                 epochs=10,
@@ -60,11 +58,6 @@ def train_model(model,
     )
 
     logger = Logger(steps_per_epoch=steps_per_epoch, batch_size=batch_size)
-
-    # Generators
-    generator_train = trainGenerator(database=dataset, batch_size=batch_size)
-    generator_val = validationGenerator(database=dataset, batch_size=batch_size)
-
 
     hist = model.fit_generator(generator=generator_train,
                                 steps_per_epoch=steps_per_epoch,

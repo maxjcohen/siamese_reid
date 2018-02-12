@@ -10,6 +10,7 @@ from matplotlib import pyplot as plt
 from src.model.caps_merge import generate_model
 from src.train import train_model
 from src.test import cmc, test
+from src.generator import trainGenerator, validationGenerator
 
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
@@ -29,12 +30,23 @@ def siamRD(model_data,
 
     # Train
     if b_train_model:
-        batch_size = model_data["batch_size"]
-        steps_per_epoch = model_data["steps_per_epoch"]
-        epochs = model_data["epochs"]
-        validation_steps = model_data["validation_steps"]
 
-        histo = train_model(model, dataset=model_data["dataset_path"], batch_size=batch_size, steps_per_epoch=steps_per_epoch, epochs=epochs, validation_steps=validation_steps)
+        # Generators
+        generator_train = trainGenerator(
+                            database=model_data["dataset_path"],
+                            batch_size=model_data["batch_size"] )
+        generator_val = validationGenerator(
+                            database=model_data["dataset_path"],
+                            batch_size=model_data["batch_size"] )
+
+        # Training
+        histo = train_model(model,
+                            generator_train=generator_train,
+                            generator_val=generator_val,
+                            batch_size=model_data["batch_size"],
+                            steps_per_epoch=model_data["steps_per_epoch"],
+                            epochs=model_data["epochs"],
+                            validation_steps=model_data["validation_steps"])
 
     # Test
     if b_test_model:
