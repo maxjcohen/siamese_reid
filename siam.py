@@ -31,11 +31,22 @@ def siamRD(model_data,
     # Train
     if b_train_model:
 
+        # Generators
+        generator_train = trainGenerator(
+                            database=model_data["dataset_path"],
+                            batch_size=model_data["batch_size"] )
+        generator_val = validationGenerator(
+                            database=model_data["dataset_path"],
+                            batch_size=model_data["batch_size"] )
+
+        # Training
         histo = train_model(model,
-                                dataset=model_data["dataset_path"], batch_size=model_data["batch_size"],
-                                steps_per_epoch=model_data["steps_per_epoch"],
-                                epochs=model_data["epochs"],
-                                validation_steps=model_data["validation_steps"])
+                            generator_train=generator_train,
+                            generator_val=generator_val,
+                            batch_size=model_data["batch_size"],
+                            steps_per_epoch=model_data["steps_per_epoch"],
+                            epochs=model_data["epochs"],
+                            validation_steps=model_data["validation_steps"])
 
     # Test
     if b_test_model:
