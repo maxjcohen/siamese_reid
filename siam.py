@@ -10,7 +10,7 @@ from matplotlib import pyplot as plt
 from src.model.caps_merge import generate_model
 from src.train import train_model
 from src.test import cmc, test
-from src.generator import trainGenerator, validationGenerator
+from src.generator import trainGenerator, validationGenerator, testGenerator
 
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
@@ -50,7 +50,9 @@ def siamRD(model_data,
 
     # Test
     if b_test_model:
-        cmc(model, b_no_ui, model_data["dataset_path"])
+        generator_test = testGenerator(
+                            database=model_data["dataset_path"])
+        cmc(model, generator_test, b_no_ui)
         # from src.generator import trainGenerator
         # gen = trainGenerator(batch_size=32)
         # test(gen, model)

@@ -2,8 +2,8 @@ import numpy as np
 import h5py
 import tqdm
 
-def cmc(model, no_ui, database="cuhk.h5"):
-    test_batch_x1, test_batch_x2, n_ids = _getTestData(database)
+def cmc(model, generator_test, no_ui):
+    test_batch_x1, test_batch_x2, n_ids = next(generator_test)
 
     ranks = np.zeros(n_ids)
     # Compute ranks
@@ -46,18 +46,3 @@ def test(gen, model):
         plt.imshow(batch[0][1][i])
         ax.set_axis_off()
     plt.show()
-
-def _getTestData(database="cuhk.h5"):
-    # Open database
-    with h5py.File(database, "r") as db:
-        n_ids = len(db["validation"])
-        image_shape = db["validation"]["0"].shape[1:]
-
-        test_batch_x1 = np.zeros((n_ids, *image_shape))
-        test_batch_x2 = np.zeros((n_ids, *image_shape))
-
-        for index in range(n_ids):
-            test_batch_x1[index] = db["validation"][str(index)][0]
-            test_batch_x2[index] = db["validation"][str(index)][-1]
-
-    return test_batch_x1, test_batch_x2, n_ids
