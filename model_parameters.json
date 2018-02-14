@@ -1,6 +1,7 @@
 {
     "weights_file": "weights_save.h5",
     "dataset_path": "cuhk.h5",
+    "input_shape": [28, 28, 1],
 
     "batch_size": 64,
     "steps_per_epoch": 100,

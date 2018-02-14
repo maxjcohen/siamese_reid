@@ -22,7 +22,7 @@ def siamRD(model_data,
 
 
     # Generate model
-    model = generate_model(input_shape=(160, 60, 3))
+    model = generate_model(input_shape=model_data["input_shape"])
 
     # Load weights
     if b_load_weights:
