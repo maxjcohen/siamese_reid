@@ -12,7 +12,7 @@ from src.train import train_model
 from src.test import cmc, test
 from src.generator import trainGenerator, validationGenerator, testGenerator
 
-os.environ["CUDA_VISIBLE_DEVICES"]="0"
+# os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 def siamRD(model_data,
             b_load_weights=False,
