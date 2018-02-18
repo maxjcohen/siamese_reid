@@ -11,8 +11,8 @@ from src.model.caps_merge import generate_model
 from src.train import train_model
 from src.test import cmc, test
 from src.generator import trainGenerator, validationGenerator, testGenerator
+from src.utils.log import log
 
-# os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 def siamRD(model_data,
             b_load_weights=False,
@@ -20,13 +20,20 @@ def siamRD(model_data,
             b_test_model=False,
             b_no_ui=False):
 
+    # Disable tf debug
+    os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
+    # Choose GPU to use
+    # os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
     # Generate model
     model = generate_model(input_shape=model_data["input_shape"])
+    log("Generated model")
 
     # Load weights
     if b_load_weights:
         model.load_weights(os.path.join("weights", model_data["weights_file"]))
+        log("Loaded weights")
 
     # Train
     if b_train_model:
@@ -40,6 +47,7 @@ def siamRD(model_data,
                             batch_size=model_data["batch_size"] )
 
         # Training
+        log("Begining training")
         histo = train_model(model,
                             generator_train=generator_train,
                             generator_val=generator_val,
@@ -52,6 +60,8 @@ def siamRD(model_data,
     if b_test_model:
         generator_test = testGenerator(
                             database=model_data["dataset_path"])
+
+        log("Testing model [cmc]")
         cmc(model, generator_test, b_no_ui)
         # from src.generator import trainGenerator
         # gen = trainGenerator(batch_size=32)

@@ -21,12 +21,15 @@ if __name__ == '__main__':
     args = parse_args()
 
     # Read parameters from json
+    if not os.path.isfile("model_parameters.json"):
+        log("model_parameters.json not found", "error")
+        sys.exit(1)
     with open("model_parameters.json", "r") as f:
         model_data = json.loads(f.read())
 
     # Check db exists
     if not os.path.isfile(model_data["dataset_path"]):
-        log("dataset {} not found.".format(model_data["dataset_path"]), "error")
+        log("dataset {} not found".format(model_data["dataset_path"]), "error")
         sys.exit(1)
 
     import siam
