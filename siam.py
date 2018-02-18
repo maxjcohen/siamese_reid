@@ -3,13 +3,8 @@ from __future__ import division, print_function
 import os
 import threading
 
-import numpy as np
-import h5py
-from keras.models import Model
-from matplotlib import pyplot as plt
-
-# from src.model.caps_merge import generate_model
-from src.model.cnn_distance import generate_model
+from src.model.caps_merge import generate_model
+# from src.model.cnn_distance import generate_model
 from src.train import train_model
 from src.test import cmc, test
 from src.generator import trainGenerator, validationGenerator, testGenerator, featureGenerator
