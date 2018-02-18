@@ -51,4 +51,4 @@ def generate_model(input_shape=(160, 60, 3)):
     sgd = SGD(lr=0.001, momentum=0.9, decay=1e-6)
     model.compile(loss=contrastive_loss, optimizer=rms)
 
-    return model
+    return [model]
