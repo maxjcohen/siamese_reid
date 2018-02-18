@@ -77,5 +77,24 @@ def testGenerator(database="cuhk.h5"):
 
             yield test_batch_x1, test_batch_x2, n_ids
 
+
+def featureGenerator(database="cuhk.h5", batch_size=32, flag="train"):
+    # Open database
+    with h5py.File(database, "r") as db:
+        n_ids = len(db[flag])
+        image_shape = db[flag]["0"].shape[1:]
+
+        while True:
+            batch_x = np.zeros((batch_size, *image_shape))
+
+            for index in range(batch_size):
+                pair_id = np.random.choice(n_ids)
+                img_id = np.random.choice(len(db[flag][str(pair_id)]))
+
+                batch_x[index] = db[flag][str(pair_id)][img_id]
+
+            yield batch_x, batch_x
+
+
 if __name__ == '__main__':
     trainGenerator()
