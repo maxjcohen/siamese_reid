@@ -1,6 +1,6 @@
 {
     "weights_file": "weights_save.h5",
-    "dataset_path": "cuhk.h5",
+    "dataset_path": "mnist.h5",
     "input_shape": [28, 28, 1],
 
     "batch_size": 64,
