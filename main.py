@@ -9,7 +9,6 @@ import matplotlib.pyplot as plt
 def parse_args():
     """Parse input arguments."""
     parser = argparse.ArgumentParser(description='Main Script.')
-    parser.add_argument('--convert', dest='dataset_path', help='Convert original dataset to format.')
     parser.add_argument('--load_weights', action='store_true', help='Loads weights.')
     parser.add_argument('--train', action='store_true', help='Trains the network.')
     parser.add_argument('--test', action='store_true', help='Test the network.')
@@ -18,22 +17,6 @@ def parse_args():
 
 if __name__ == '__main__':
     args = parse_args()
-
-    # Convert database [cuhk]
-    if args.dataset_path is not None:
-        # Check file exists
-        if not os.path.isfile(args.dataset_path):
-            print("\033[1m\033[91mERROR\033[0m {} not found.".format(args.dataset_path))
-            sys.exit(1)
-
-        # Convert
-        print("\033[1m\033[94mConverting\033[0m {} [dataset cuhk]".format(args.dataset_path))
-
-        import src.dataset.cuhk as cuhk
-        cuhk.convertCuhk(database=args.dataset_path, output="bla.h5")
-
-        print("\033[1m\033[94mDone\033[0m")
-
 
     # Read parameters from json
     with open("model_parameters.json", "r") as f:
