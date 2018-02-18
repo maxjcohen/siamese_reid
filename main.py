@@ -6,6 +6,8 @@ import json
 import h5py
 import matplotlib.pyplot as plt
 
+from src.utils.log import log
+
 def parse_args():
     """Parse input arguments."""
     parser = argparse.ArgumentParser(description='Main Script.')
@@ -24,7 +26,7 @@ if __name__ == '__main__':
 
     # Check db exists
     if not os.path.isfile(model_data["dataset_path"]):
-        print("\033[1m\033[91mERROR\033[0m dataset {} not found.".format(model_data["dataset_path"]))
+        log("dataset {} not found.".format(model_data["dataset_path"]), "error")
         sys.exit(1)
 
     import siam
