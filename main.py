@@ -3,9 +3,6 @@ import os.path
 import sys
 import json
 
-import h5py
-import matplotlib.pyplot as plt
-
 from src.utils.log import log
 
 def parse_args():
