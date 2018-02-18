@@ -46,7 +46,6 @@ def siamRD(model_data,
                             database=model_data["dataset_path"],
                             batch_size=model_data["batch_size"] )
 
-        # Training
         log("Begining training")
         histo = train_model(model,
                             generator_train=generator_train,
@@ -63,6 +62,3 @@ def siamRD(model_data,
 
         log("Testing model [cmc]")
         cmc(model, generator_test, b_no_ui)
-        # from src.generator import trainGenerator
-        # gen = trainGenerator(batch_size=32)
-        # test(gen, model)
