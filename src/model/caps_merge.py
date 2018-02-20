@@ -30,18 +30,15 @@ def generate_model(input_shape=(28, 28, 1)):
 
 
         # Base network
-        x = layers.Input(shape=input_shape)
+        x = Input(shape=args.input_shape)
 
-        conv1 = layers.Conv2D(filters=128, kernel_size=3, strides=1, padding='valid', activation='relu', name='conv1')(x)
+        conv1 = Conv2D(filters=128, kernel_size=3, strides=1, padding='valid', activation='relu')(x)
 
         primarycaps = PrimaryCap(conv1, dim_capsule=8, n_channels=16, kernel_size=3, strides=2, padding='valid')
 
-        digitcaps = CapsuleLayer(num_capsule=n_class, dim_capsule=16, routings=routings,
-                                 name='digitcaps')(primarycaps)
+        digitcaps = CapsuleLayer(num_capsule=args.n_class, dim_capsule=16, routings=args.routings)(primarycaps)
 
-        out_caps = Length(name='capsnet')(digitcaps)
-
-        base_network = models.Model(x, out_caps)
+        base_network = Model(x, digitcaps)
 
         # Reid network
         x1 = layers.Input(shape=input_shape)
