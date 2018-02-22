@@ -4,7 +4,7 @@ from keras import backend as K
 from keras.utils import to_categorical
 from keras.models import Model, Sequential
 from keras.layers import Input, Flatten, Dense, Dropout, Lambda, Reshape, BatchNormalization, Activation
-from keras.layers.convolutional import Convolution2D, MaxPooling2D
+from keras.layers.convolutional import Conv2D, MaxPooling2D
 from keras.layers import Lambda
 from keras.optimizers import RMSprop, SGD, Adam
 from keras.preprocessing.image import ImageDataGenerator
@@ -51,7 +51,7 @@ def generate_model(input_shape=(28, 28, 1)):
 
         distance = Lambda(euclidean_distance)([out1, out2])
 
-        reid_network = models.Model([x1, x2], distance)
+        reid_network = Model([x1, x2], distance)
 
         # Decoder
         decoder = Sequential([
