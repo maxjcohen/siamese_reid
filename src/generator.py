@@ -1,7 +1,7 @@
 import numpy as np
 import h5py
 
-def trainGenerator(database="cuhk.h5", batch_size=32):
+def trainGenerator(database="cuhk.h5", batch_size=32, p=1/3):
     # Open database
     with h5py.File(database, "r") as db:
         n_ids = len(db["train"])
@@ -13,7 +13,7 @@ def trainGenerator(database="cuhk.h5", batch_size=32):
             batch_y = np.zeros((batch_size, 2))
 
             # Choose positive or negative pair
-            pairs = np.random.choice(["positive", "negative"], p=[1/3, 2/3], size=batch_size)
+            pairs = np.random.choice(["positive", "negative"], p=[p, 1-p], size=batch_size)
 
             for index, pair in enumerate(pairs):
                 if pair == "positive":
