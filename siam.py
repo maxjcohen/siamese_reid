@@ -115,7 +115,7 @@ class ReID:
         log("Begining training [reid]")
         train_model(self.reid_network,
                     generator_train=generator_train,
-                    generator_val=generator_train,
+                    generator_val=generator_val,
                     batch_size=self.batch_size,
                     steps_per_epoch=self.steps_per_epoch,
                     epochs=self.epochs,
