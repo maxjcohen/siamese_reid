@@ -4,7 +4,7 @@ from keras import backend as K
 from keras.utils import to_categorical
 from keras.models import Model, Sequential
 from keras.layers import Input, Flatten, Dense, Dropout, Lambda, Reshape, BatchNormalization, Activation
-from keras.layers.convolutional import Convolution2D, MaxPooling2D
+from keras.layers.convolutional import Conv2D, MaxPooling2D
 from keras.layers import Lambda
 from keras.optimizers import RMSprop, SGD, Adam
 from keras.preprocessing.image import ImageDataGenerator
@@ -28,31 +28,30 @@ def generate_model(input_shape=(28, 28, 1)):
         n_class = 10
         routings = 3
 
-
         # Base network
-        x = layers.Input(shape=input_shape)
+        x = Input(shape=input_shape)
 
-        conv1 = layers.Conv2D(filters=128, kernel_size=3, strides=1, padding='valid', activation='relu', name='conv1')(x)
+        conv1 = Conv2D(filters=128, kernel_size=3, strides=1, padding='valid', activation='relu')(x)
 
         primarycaps = PrimaryCap(conv1, dim_capsule=8, n_channels=16, kernel_size=3, strides=2, padding='valid')
 
-        digitcaps = CapsuleLayer(num_capsule=n_class, dim_capsule=16, routings=routings,
-                                 name='digitcaps')(primarycaps)
+        digitcaps = CapsuleLayer(num_capsule=n_class, dim_capsule=16, routings=routings)(primarycaps)
 
-        out_caps = Length(name='capsnet')(digitcaps)
-
-        base_network = models.Model(x, out_caps)
+        base_network = Model(x, digitcaps)
 
         # Reid network
         x1 = layers.Input(shape=input_shape)
         x2 = layers.Input(shape=input_shape)
 
         out1 = base_network(x1)
+        out1 = Reshape((10*16,)) (out1)
+
         out2 = base_network(x2)
+        out2 = Reshape((10*16,)) (out2)
 
         distance = Lambda(euclidean_distance)([out1, out2])
 
-        reid_network = models.Model([x1, x2], distance)
+        reid_network = Model([x1, x2], distance)
 
         # Decoder
         decoder = Sequential([
