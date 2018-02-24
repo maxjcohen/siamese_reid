@@ -54,7 +54,7 @@ class ReidGenerator():
                             batch_x_2[index] = db[self.flag][str(pair_ids[1])][pair_b]
                             batch_y[index] = 0
 
-                elif flag == "validation":
+                elif self.flag == "validation":
                     for index in range(batch_size):
                         pair_ids = np.random.choice(n_ids, 2, replace=True)
                         pair_a = np.random.choice(len(db[self.flag][str(pair_ids[0])]))
