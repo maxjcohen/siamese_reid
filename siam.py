@@ -9,6 +9,7 @@ from src.train import train_model
 from src.test import cmc, test
 from src.generator import ReidGenerator, testGenerator, featureGenerator
 from src.utils.log import log
+import src.utils.plot as plot
 
 class ReID:
     """docstring for ReID."""
@@ -92,13 +93,13 @@ class ReID:
                                 flag="validation" )
 
             log("Begining training [features]")
-            histo = train_model(self.feature_network,
-                                generator_train=generator_train,
-                                generator_val=generator_train,
-                                batch_size=self.batch_size,
-                                steps_per_epoch=self.steps_per_epoch,
-                                epochs=self.epochs,
-                                validation_steps=self.validation_steps)
+            train_model(self.feature_network,
+                        generator_train=generator_train,
+                        generator_val=generator_train,
+                        batch_size=self.batch_size,
+                        steps_per_epoch=self.steps_per_epoch,
+                        epochs=self.epochs,
+                        validation_steps=self.validation_steps)
 
 
         # Generators
@@ -112,13 +113,17 @@ class ReID:
                             flag="validation")
 
         log("Begining training [reid]")
-        histo = train_model(self.reid_network,
-                            generator_train=generator_train,
-                            generator_val=generator_train,
-                            batch_size=self.batch_size,
-                            steps_per_epoch=self.steps_per_epoch,
-                            epochs=self.epochs,
-                            validation_steps=self.validation_steps)
+        train_model(self.reid_network,
+                    generator_train=generator_train,
+                    generator_val=generator_train,
+                    batch_size=self.batch_size,
+                    steps_per_epoch=self.steps_per_epoch,
+                    epochs=self.epochs,
+                    validation_steps=self.validation_steps)
+
+        # Display loss histories
+        if not self.b_no_ui:
+            plot.showPlot()
 
     def test(self):
         generator_test = testGenerator(database=self.dataset)

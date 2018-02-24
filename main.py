@@ -5,7 +5,6 @@ import json
 
 from src.utils.log import log
 
-# TODO: display learning history after training
 # TODO: learning curve
 # TODO: define metrics
 # TODO: except error from loading weights

@@ -5,6 +5,9 @@ from keras.models import Model
 from keras.callbacks import ModelCheckpoint, Callback
 from keras import backend as K
 
+import src.utils.plot as plot
+
+
 class Logger(Callback):
     def __init__(self, steps_per_epoch=None, batch_size=None):
         # Init logger
@@ -36,6 +39,14 @@ class Logger(Callback):
         # Close logger
         self.csvfile.close()
 
+class LossHistory(Callback):
+    def on_train_begin(self, logs={}):
+        self.loss = []
+
+    def on_batch_end(self, batch, logs={}):
+        self.loss.append(logs.get('loss'))
+
+
 def train_model(model,
                 generator_train,
                 generator_val,
@@ -58,15 +69,18 @@ def train_model(model,
     )
 
     logger = Logger(steps_per_epoch=steps_per_epoch, batch_size=batch_size)
+    history = LossHistory()
 
-    hist = model.fit_generator(generator=generator_train,
-                                steps_per_epoch=steps_per_epoch,
-                                epochs=epochs,
-                                verbose=verbose,
-                                validation_data=generator_val,
-                                validation_steps=validation_steps,
-                                initial_epoch=initial_epoch,
-                                callbacks=[modelCheckpoint, logger],
+    model.fit_generator(generator=generator_train,
+                        steps_per_epoch=steps_per_epoch,
+                        epochs=epochs,
+                        verbose=verbose,
+                        validation_data=generator_val,
+                        validation_steps=validation_steps,
+                        initial_epoch=initial_epoch,
+                        callbacks=[modelCheckpoint, logger, history],
     )
 
-    return hist
+    plot.plotHistory(history.loss)
+
+    return history
