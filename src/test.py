@@ -25,7 +25,7 @@ def cmc(model, generator_test, no_ui):
             plt.annotate("rg{}: {:.2f}".format(index+1, value), (index, value), xytext=(index+1.7, value-0.02))
         plt.show()
 
-    print(ranks)
+    print("Ranks:", *ranks, sep="\n\t")
 
     return ranks
 
