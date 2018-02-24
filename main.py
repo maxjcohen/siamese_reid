@@ -8,10 +8,7 @@ from src.utils.log import log
 # TODO: display learning history after training
 # TODO: learning curve
 # TODO: define metrics
-# TODO: remove threadsafe_iter class
 # TODO: except error from loading weights
-# TODO: fixe imports
-# TODO: clean generators
 
 def parse_args():
     """Parse input arguments."""

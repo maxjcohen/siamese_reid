@@ -7,7 +7,7 @@ from src.model.caps_merge import generate_model
 # from src.model.cnn_distance import generate_model
 from src.train import train_model
 from src.test import cmc, test
-from src.generator import trainGenerator, validationGenerator, testGenerator, featureGenerator
+from src.generator import ReidGenerator, testGenerator, featureGenerator
 from src.utils.log import log
 
 class ReID:
@@ -16,7 +16,7 @@ class ReID:
         self.model_data = model_data
 
         self.reid_network = None
-        
+
         self.feature_network = None
         self.pretrain = False
 
@@ -102,16 +102,15 @@ class ReID:
 
 
         # Generators
-        generator_train = trainGenerator(
+        generator_train = ReidGenerator(
                             database=self.dataset,
-                            batch_size=self.batch_size )
-        generator_val = validationGenerator(
+                            batch_size=self.batch_size,
+                            flag="train")
+        generator_val = ReidGenerator(
                             database=self.dataset,
-                            batch_size=self.batch_size )
-
-        generator_train = self.threadsafe_iter(generator_train)
-        generator_val = self.threadsafe_iter(generator_val)
-
+                            batch_size=self.batch_size,
+                            flag="validation")
+        
         log("Begining training [reid]")
         histo = train_model(self.reid_network,
                             generator_train=generator_train,
