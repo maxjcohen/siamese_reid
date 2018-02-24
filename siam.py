@@ -3,6 +3,8 @@ from __future__ import division, print_function
 import os
 import threading
 
+import numpy as np
+
 from src.model.caps_merge import generate_model
 # from src.model.cnn_distance import generate_model
 from src.train import train_model
@@ -134,3 +136,36 @@ class ReID:
     def loadWeights(self):
         self.reid_network.load_weights(os.path.join("weights", self.weights_file))
         log("Loaded weights")
+
+    def learningCurve(self, n_from=10, n_to=50, n_steps=10):
+        # NOTE: In contruction
+        log("Begining learning curve")
+        plot_x = np.arange(n_from, n_to, n_steps, dtype="float")
+        plot_loss = 0 * plot_x
+        plot_val_loss = 0 * plot_x
+
+        index = 0
+        for n_examples in range(n_from, n_to, n_steps):
+            generator_train = ReidGenerator(
+                                database=self.dataset,
+                                batch_size=n_examples,
+                                flag="train")
+            generator_val = ReidGenerator(
+                                database=self.dataset,
+                                batch_size=self.batch_size,
+                                flag="validation")
+
+            history = train_model(self.reid_network,
+                        generator_train=generator_train,
+                        generator_val=generator_val,
+                        steps_per_epoch=1,
+                        epochs=1,
+                        validation_steps=1)
+
+            plot_loss[index] = history.history["loss"][0]
+            plot_val_loss[index] = history.history["val_loss"][0]
+
+            index += 1
+
+        plot.learningCurve(plot_x, plot_loss, plot_val_loss)
+        plot.showPlot()
