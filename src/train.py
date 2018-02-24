@@ -71,7 +71,7 @@ def train_model(model,
     logger = Logger(steps_per_epoch=steps_per_epoch, batch_size=batch_size)
     history = LossHistory()
 
-    model.fit_generator(generator=generator_train,
+    hist = model.fit_generator(generator=generator_train,
                         steps_per_epoch=steps_per_epoch,
                         epochs=epochs,
                         verbose=verbose,
@@ -81,6 +81,6 @@ def train_model(model,
                         callbacks=[modelCheckpoint, logger, history],
     )
 
-    plot.plotHistory(history.loss)
+    # plot.plotHistory(history.loss)
 
-    return history
+    return hist
