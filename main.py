@@ -30,9 +30,8 @@ if __name__ == '__main__':
         sys.exit(1)
 
     import siam
-    siam.siamRD(
-        model_data=model_data,
+    model = siam.ReID(model_data, b_no_ui=args.no_ui)
+    model.run(
         b_load_weights=args.load_weights,
         b_train_model=args.train,
-        b_test_model=args.test,
-        b_no_ui=args.no_ui)
+        b_test_model=args.test)
