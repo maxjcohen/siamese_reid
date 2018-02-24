@@ -1,5 +1,4 @@
 import numpy as np
-import h5py
 import tqdm
 
 def cmc(model, generator_test, no_ui):
