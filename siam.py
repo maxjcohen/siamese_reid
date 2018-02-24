@@ -110,7 +110,7 @@ class ReID:
                             database=self.dataset,
                             batch_size=self.batch_size,
                             flag="validation")
-        
+
         log("Begining training [reid]")
         histo = train_model(self.reid_network,
                             generator_train=generator_train,
@@ -129,18 +129,3 @@ class ReID:
     def loadWeights(self):
         self.reid_network.load_weights(os.path.join("weights", self.weights_file))
         log("Loaded weights")
-
-    class threadsafe_iter:
-        """Takes an iterator/generator and makes it thread-safe by
-        serializing call to the `next` method of given iterator/generator.
-        """
-        def __init__(self, it):
-            self.it = it
-            self.lock = threading.Lock()
-
-        def __iter__(self):
-            return self
-
-        def __next__(self):
-            with self.lock:
-                return next(self.it)
