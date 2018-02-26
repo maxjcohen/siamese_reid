@@ -43,7 +43,9 @@ class ReID:
 
         # Train
         if b_train_model:
-            self.train()
+            if self.pretrain:
+                self.train("feature")
+            self.train("reid")
 
         # Test
         if b_test_model:
@@ -81,10 +83,9 @@ class ReID:
             exit(101)
         log("Model generated")
 
-    def train(self):
+    def train(self, flag="reid"):
 
-        if self.pretrain:
-            # Generators
+        if flag == "feature":
             generator_train = featureGenerator(
                                 database=self.dataset,
                                 batch_size=self.batch_size,
@@ -103,25 +104,27 @@ class ReID:
                         epochs=self.epochs,
                         validation_steps=self.validation_steps)
 
+        elif flag == "reid":
+            generator_train = ReidGenerator(
+                                database=self.dataset,
+                                batch_size=self.batch_size,
+                                flag="train")
+            generator_val = ReidGenerator(
+                                database=self.dataset,
+                                batch_size=self.batch_size,
+                                flag="validation")
 
-        # Generators
-        generator_train = ReidGenerator(
-                            database=self.dataset,
-                            batch_size=self.batch_size,
-                            flag="train")
-        generator_val = ReidGenerator(
-                            database=self.dataset,
-                            batch_size=self.batch_size,
-                            flag="validation")
-
-        log("Begining training [reid]")
-        train_model(self.reid_network,
-                    generator_train=generator_train,
-                    generator_val=generator_val,
-                    batch_size=self.batch_size,
-                    steps_per_epoch=self.steps_per_epoch,
-                    epochs=self.epochs,
-                    validation_steps=self.validation_steps)
+            log("Begining training [reid]")
+            train_model(self.reid_network,
+                        generator_train=generator_train,
+                        generator_val=generator_val,
+                        batch_size=self.batch_size,
+                        steps_per_epoch=self.steps_per_epoch,
+                        epochs=self.epochs,
+                        validation_steps=self.validation_steps)
+        else:
+            log('flag "{}" not understood'.format(flag), "error")
+            raise ValueError('flag "{}" not understood'.format(flag))
 
         # Display loss histories
         if not self.b_no_ui:
