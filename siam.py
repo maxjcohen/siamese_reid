@@ -140,35 +140,41 @@ class ReID:
         self.reid_network.load_weights(os.path.join("weights", self.weights_file))
         log("Loaded weights")
 
-    def learningCurve(self, n_from=10, n_to=50, n_steps=10):
-        # NOTE: In contruction
+    def learningCurve(self, n_from=1, n_to=10, n_steps=1):
         log("Begining learning curve")
-        plot_x = np.arange(n_from, n_to, n_steps, dtype="float")
-        plot_loss = 0 * plot_x
-        plot_val_loss = 0 * plot_x
 
-        index = 0
+        if self.pretrain:
+            self.train(flag="feature")
+        Wsave = self.reid_network.get_weights()
+
+        plot_loss = []
+        plot_val_loss = []
+
+        generator_val = ReidGenerator(
+                            database=self.dataset,
+                            batch_size=self.batch_size,
+                            flag="validation")
+
+        generator_train = ReidGenerator(
+                            database=self.dataset,
+                            batch_size=self.batch_size,
+                            flag="train")
+
         for n_examples in range(n_from, n_to, n_steps):
-            generator_train = ReidGenerator(
-                                database=self.dataset,
-                                batch_size=n_examples,
-                                flag="train")
-            generator_val = ReidGenerator(
-                                database=self.dataset,
-                                batch_size=self.batch_size,
-                                flag="validation")
+            log("\tTraining with {} batchs".format(n_examples))
+            self.reid_network.set_weights(Wsave)
 
             history = train_model(self.reid_network,
                         generator_train=generator_train,
                         generator_val=generator_val,
                         steps_per_epoch=1,
-                        epochs=1,
-                        validation_steps=1)
+                        epochs=n_examples,
+                        validation_steps=1,
+                        verbose=0)
 
-            plot_loss[index] = history.history["loss"][0]
-            plot_val_loss[index] = history.history["val_loss"][0]
+            plot_loss.append( history.history["loss"][-1] )
+            plot_val_loss.append( history.history["val_loss"][-1] )
 
-            index += 1
 
-        plot.learningCurve(plot_x, plot_loss, plot_val_loss)
+        plot.learningCurve(plot_loss, plot_val_loss)
         plot.showPlot()

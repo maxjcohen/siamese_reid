@@ -39,3 +39,5 @@ if __name__ == '__main__':
         b_load_weights=args.load_weights,
         b_train_model=args.train,
         b_test_model=args.test)
+        
+    model.learningCurve()

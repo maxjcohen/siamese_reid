@@ -9,11 +9,11 @@ def plotHistory(loss):
     plt.xlabel('batch')
 
 
-def learningCurve(plot_x, plot_loss, plot_val_loss):
+def learningCurve(plot_loss, plot_val_loss):
     plt.figure()
 
-    plt.plot(plot_x, plot_loss)
-    plt.plot(plot_x, plot_val_loss)
+    plt.plot(plot_loss, "b")
+    plt.plot(plot_val_loss, "r")
 
 def showPlot():
     plt.show()
