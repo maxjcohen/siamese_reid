@@ -27,15 +27,13 @@ class ReID:
 
         self.__initEnv()
         self.__parseData()
+        self.__generateNetwork()
 
 
     def run(self,
             b_load_weights=False,
             b_train_model=False,
             b_test_model=False):
-
-        # Generate model
-        self.generateNetwork()
 
         # Load weights
         if b_load_weights:
@@ -68,7 +66,7 @@ class ReID:
         self.validation_steps = self.model_data["validation_steps"]
         self.weights_file = self.model_data["weights_file"]
 
-    def generateNetwork(self):
+    def __generateNetwork(self):
         networks = generate_model(input_shape=self.input_shape)
 
         if len(networks) == 2:
