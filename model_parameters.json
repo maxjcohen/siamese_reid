@@ -1,10 +1,10 @@
 {
-    "weights_file": "weights_save.h5",
+    "weights_file": "weights_01_0.50.hdf5",
     "dataset_path": "mnist.h5",
     "input_shape": [28, 28, 1],
 
     "batch_size": 64,
-    "steps_per_epoch": 100,
-    "epochs": 3,
-    "validation_steps": 10
+    "steps_per_epoch": 1000,
+    "epochs": 1,
+    "validation_steps": 150
 }
