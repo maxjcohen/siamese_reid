@@ -5,10 +5,8 @@ import json
 
 from src.utils.log import log
 
-# TODO: learning curve
 # TODO: define metrics
 # TODO: except error from loading weights
-# TODO: ploting issues
 
 def parse_args():
     """Parse input arguments."""
@@ -40,5 +38,5 @@ if __name__ == '__main__':
         b_load_weights=args.load_weights,
         b_train_model=args.train,
         b_test_model=args.test)
-        
+
     model.learningCurve()
