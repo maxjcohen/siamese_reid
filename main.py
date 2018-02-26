@@ -8,6 +8,7 @@ from src.utils.log import log
 # TODO: learning curve
 # TODO: define metrics
 # TODO: except error from loading weights
+# TODO: ploting issues
 
 def parse_args():
     """Parse input arguments."""
