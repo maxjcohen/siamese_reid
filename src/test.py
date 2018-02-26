@@ -1,6 +1,8 @@
 import numpy as np
 import tqdm
 
+import src.utils.plot as plot
+
 def cmc(model, generator_test, no_ui):
     test_batch_x1, test_batch_x2, n_ids = next(generator_test)
 
@@ -17,14 +19,7 @@ def cmc(model, generator_test, no_ui):
 
     ranks = ranks / n_ids
 
-    if not no_ui:
-        from matplotlib import pyplot as plt
-        # Plot
-        plt.plot(ranks)
-        for index, value in enumerate(ranks):
-            plt.annotate("rg{}: {:.2f}".format(index+1, value), (index, value), xytext=(index+1.7, value-0.02))
-        plt.show()
-
+    plot.plotCMC(ranks)
     print("Ranks:", *ranks, sep="\n\t")
 
     return ranks

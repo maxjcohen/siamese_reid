@@ -55,7 +55,9 @@ def train_model(model,
                 epochs=10,
                 verbose=1,
                 validation_steps=10,
-                initial_epoch=0):
+                initial_epoch=0,
+                b_plot=True,
+                plot_title=""):
 
     # Loggers
     modelCheckpoint = ModelCheckpoint(
@@ -81,6 +83,7 @@ def train_model(model,
                         callbacks=[modelCheckpoint, logger, history],
     )
 
-    # plot.plotHistory(history.loss)
+    if b_plot:
+        plot.plotHistory(history.loss, title=plot_title)
 
     return hist

@@ -49,6 +49,7 @@ class ReID:
         if b_test_model:
             self.test()
 
+        self.showPlot()
 
     def __initEnv(self):
         # Disable tf debug
@@ -81,6 +82,10 @@ class ReID:
             exit(101)
         log("Model generated")
 
+    def showPlot(self):
+        if not self.b_no_ui:
+            plot.showPlot()
+
     def train(self, flag="reid"):
 
         if flag == "feature":
@@ -100,7 +105,8 @@ class ReID:
                         batch_size=self.batch_size,
                         steps_per_epoch=self.steps_per_epoch,
                         epochs=self.epochs,
-                        validation_steps=self.validation_steps)
+                        validation_steps=self.validation_steps,
+                        plot_title="loss [feature training]")
 
         elif flag == "reid":
             generator_train = ReidGenerator(
@@ -119,14 +125,11 @@ class ReID:
                         batch_size=self.batch_size,
                         steps_per_epoch=self.steps_per_epoch,
                         epochs=self.epochs,
-                        validation_steps=self.validation_steps)
+                        validation_steps=self.validation_steps,
+                        plot_title="loss [reid training]")
         else:
             log('flag "{}" not understood'.format(flag), "error")
             raise ValueError('flag "{}" not understood'.format(flag))
-
-        # Display loss histories
-        if not self.b_no_ui:
-            plot.showPlot()
 
     def test(self):
         generator_test = testGenerator(database=self.dataset)
@@ -168,7 +171,8 @@ class ReID:
                         steps_per_epoch=1,
                         epochs=n_examples,
                         validation_steps=1,
-                        verbose=0)
+                        verbose=0,
+                        b_plot=False)
 
             plot_loss.append( history.history["loss"][-1] )
             plot_val_loss.append( history.history["val_loss"][-1] )
