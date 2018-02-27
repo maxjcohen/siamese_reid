@@ -14,11 +14,6 @@ from PIL import Image
 from src.model.capsulelayers import CapsuleLayer, PrimaryCap, Length, Mask
 
 def generate_model(input_shape=(28, 28, 1)):
-    def margin_loss(y_true, y_pred):
-        L = y_true * K.square(K.maximum(0., 0.9 - y_pred)) + \
-            0.5 * (1 - y_true) * K.square(K.maximum(0., y_pred - 0.1))
-
-        return K.mean(K.sum(L, 1))
 
     def buildNetwork(input_shape=(28, 28, 1)):
         def euclidean_distance(vects):
@@ -70,6 +65,21 @@ def generate_model(input_shape=(28, 28, 1)):
         margin = 1
         return K.mean(y_true * K.square(y_pred) + (1 - y_true) * K.square(K.maximum(margin - y_pred, 0)))
 
+    def margin_loss(y_true, y_pred):
+        L = y_true * K.square(K.maximum(0., 0.9 - y_pred)) + \
+            0.5 * (1 - y_true) * K.square(K.maximum(0., y_pred - 0.1))
+
+        return K.mean(K.sum(L, 1))
+
+    def f1score(y_true, y_pred):
+        tp = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+        pred_pos = K.sum(K.round(K.clip(y_pred, 0, 1)))
+        precision = tp / (pred_pos + K.epsilon())
+
+        real_pos = K.sum(K.round(K.clip(y_true, 0, 1)))
+        recall = tp / (real_pos + K.epsilon())
+
+        return 2 * precision * recall / (precision + recall + K.epsilon())
 
     reid_network, feature_network = buildNetwork(input_shape=input_shape)
 
@@ -78,6 +88,6 @@ def generate_model(input_shape=(28, 28, 1)):
 
     # Reid network
     rms = RMSprop()
-    reid_network.compile(loss=contrastive_loss, optimizer=rms)
+    reid_network.compile(loss=contrastive_loss, optimizer=rms, metrics=[f1score])
 
     return reid_network, feature_network
