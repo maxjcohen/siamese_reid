@@ -115,7 +115,8 @@ class ReID:
             generator_train = ReidGenerator(
                                 database=self.dataset,
                                 batch_size=self.batch_size,
-                                flag="train")
+                                flag="train",
+                                p=0.33)
             generator_val = ReidGenerator(
                                 database=self.dataset,
                                 batch_size=self.batch_size,
