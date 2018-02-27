@@ -11,6 +11,7 @@ from src.utils.log import log
 def parse_args():
     """Parse input arguments."""
     parser = argparse.ArgumentParser(description='Main Script.')
+    parser.add_argument('--lc', action='store_true', help='Run learning curve.')
     parser.add_argument('--load_weights', action='store_true', help='Loads weights.')
     parser.add_argument('--train', action='store_true', help='Trains the network.')
     parser.add_argument('--test', action='store_true', help='Test the network.')
@@ -37,6 +38,5 @@ if __name__ == '__main__':
     model.run(
         b_load_weights=args.load_weights,
         b_train_model=args.train,
-        b_test_model=args.test)
-
-    model.learningCurve()
+        b_test_model=args.test,
+        b_lc=args.lc)

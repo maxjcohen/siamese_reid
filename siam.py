@@ -33,9 +33,12 @@ class ReID:
     def run(self,
             b_load_weights=False,
             b_train_model=False,
-            b_test_model=False):
+            b_test_model=False,
+            b_lc=False):
 
-        # Load weights
+        if b_lc:
+            self.learningCurve()
+
         if b_load_weights:
             self.loadWeights()
 
@@ -98,7 +101,7 @@ class ReID:
                                 batch_size=self.batch_size,
                                 flag="validation" )
 
-            log("Begining training [features]")
+            log("Training [features]")
             train_model(self.feature_network,
                         generator_train=generator_train,
                         generator_val=generator_train,
@@ -118,7 +121,7 @@ class ReID:
                                 batch_size=self.batch_size,
                                 flag="validation")
 
-            log("Begining training [reid]")
+            log("Training [reid]")
             train_model(self.reid_network,
                         generator_train=generator_train,
                         generator_val=generator_val,
@@ -141,11 +144,12 @@ class ReID:
         self.reid_network.load_weights(os.path.join("weights", self.weights_file))
         log("Loaded weights")
 
-    def learningCurve(self, n_from=1, n_to=10, n_steps=1):
+    def learningCurve(self, n_from=1, n_to=4, n_steps=1):
         log("Begining learning curve")
-
-        if self.pretrain:
-            self.train(flag="feature")
+        self.reid_network.load_weights("weights/feature.hdf5")
+        # if self.pretrain:
+        #     self.train(flag="feature")
+        # self.reid_network.save_weights("weights/feature.hdf5")
         Wsave = self.reid_network.get_weights()
 
         plot_loss = []
@@ -153,30 +157,40 @@ class ReID:
 
         generator_val = ReidGenerator(
                             database=self.dataset,
-                            batch_size=self.batch_size,
+                            batch_size=self.batch_size*10,
                             flag="validation")
-
-        generator_train = ReidGenerator(
-                            database=self.dataset,
-                            batch_size=self.batch_size,
-                            flag="train")
+        batch_val = next(generator_val)
 
         for n_examples in range(n_from, n_to, n_steps):
             log("\tTraining with {} batchs".format(n_examples))
             self.reid_network.set_weights(Wsave)
 
-            history = train_model(self.reid_network,
-                        generator_train=generator_train,
-                        generator_val=generator_val,
-                        steps_per_epoch=1,
-                        epochs=n_examples,
-                        validation_steps=1,
-                        verbose=0,
-                        b_plot=False)
+            # Trains on n examples
+            batch_train = next(ReidGenerator(
+                                database=self.dataset,
+                                batch_size=n_examples,
+                                flag="train"))
+            self.reid_network.fit(x=batch_train[0],
+                                    y=batch_train[1],
+                                    batch_size=self.batch_size,
+                                    epochs=3,
+                                    verbose=1)
 
-            plot_loss.append( history.history["loss"][-1] )
-            plot_val_loss.append( history.history["val_loss"][-1] )
+            # Evaluate on these examples
+            rslt = self.reid_network.evaluate(x=batch_train[0],
+                                                y=batch_train[1],
+                                                batch_size=self.batch_size,
+                                                verbose=1)
+            plot_loss.append( rslt )
 
+            # Evaluate on all CV set
+            rslt = self.reid_network.evaluate(x=batch_val[0],
+                                                y=batch_val[1],
+                                                batch_size=self.batch_size,
+                                                verbose=1)
+            plot_val_loss.append( rslt )
 
+        print(*plot_loss, sep="; ")
+        print(*plot_val_loss, sep="; ")
         plot.learningCurve(plot_loss, plot_val_loss)
         plot.showPlot()
