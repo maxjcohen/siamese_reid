@@ -182,14 +182,14 @@ class ReID:
                                                 y=batch_train[1],
                                                 batch_size=self.batch_size,
                                                 verbose=1)
-            plot_loss.append( rslt )
+            plot_loss.append( rslt[1] )
 
             # Evaluate on all CV set
             rslt = self.reid_network.evaluate(x=batch_val[0],
                                                 y=batch_val[1],
                                                 batch_size=self.batch_size,
                                                 verbose=1)
-            plot_val_loss.append( rslt )
+            plot_val_loss.append( rslt[1] )
 
         print(*plot_loss, sep="; ")
         print(*plot_val_loss, sep="; ")
