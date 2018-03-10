@@ -23,7 +23,7 @@ class ReidGenerator():
         with self.lock:
            # Open database
             with h5py.File(self.database, "r") as db:
-                n_ids = len(db["train"])
+
                 image_shape = db["train"]["0"].shape[1:]
 
                 batch_x_1 = np.zeros((self.batch_size, *image_shape))
@@ -31,7 +31,7 @@ class ReidGenerator():
                 batch_y = np.zeros((self.batch_size,2))
 
                 if self.flag == "train":
-
+                    n_ids = len(db["train"])
                     # Choose positive or negative pair
                     pairs = np.random.choice(["positive", "negative"], p=[self.p, 1-self.p], size=self.batch_size)
 
@@ -55,6 +55,7 @@ class ReidGenerator():
                             batch_y[index] = [1, 0]
 
                 elif self.flag == "validation":
+                    n_ids = len(db["validation"])
                     for index in range(self.batch_size):
                         pair_ids = np.random.choice(n_ids, 2, replace=True)
                         pair_a = np.random.choice(len(db[self.flag][str(pair_ids[0])]))
