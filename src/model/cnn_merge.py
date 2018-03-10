@@ -36,9 +36,7 @@ def generate_model(input_shape=(160, 60, 3)):
         merged = Dense(64, activation="relu") (merged)
         output = Dense(2, activation="softmax") (merged)
 
-        distance = Lambda(euclidean_distance)([output_a, output_b])
-
-        return Model([input_a, input_b], distance)
+        return Model([input_a, input_b], output)
 
     def contrastive_loss(y_true, y_pred):
         margin = 1
@@ -49,6 +47,6 @@ def generate_model(input_shape=(160, 60, 3)):
 
     rms = RMSprop()
     sgd = SGD(lr=0.001, momentum=0.9, decay=1e-6)
-    model.compile(loss=contrastive_loss, optimizer=rms)
+    model.compile(loss="binary_crossentropy", optimizer=sgd)
 
     return [model]
