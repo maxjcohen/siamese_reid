@@ -46,7 +46,7 @@ def generate_model(input_shape=(160, 60, 3)):
     model = buildNetwork(input_shape=input_shape)
 
     rms = RMSprop()
-    sgd = SGD(lr=0.001, momentum=0.9, decay=1e-6)
+    sgd = SGD(lr=0.01, momentum=0.9, decay=1e-6)
     model.compile(loss="binary_crossentropy", optimizer=sgd)
 
     return [model]
