@@ -28,7 +28,7 @@ class ReidGenerator():
 
                 batch_x_1 = np.zeros((self.batch_size, *image_shape))
                 batch_x_2 = np.zeros((self.batch_size, *image_shape))
-                batch_y = np.zeros((self.batch_size,))
+                batch_y = np.zeros((self.batch_size,2))
 
                 if self.flag == "train":
 
@@ -42,7 +42,7 @@ class ReidGenerator():
 
                             batch_x_1[index] = db[self.flag][str(pair_id)][pair_a]
                             batch_x_2[index] = db[self.flag][str(pair_id)][pair_b]
-                            batch_y[index] = 1
+                            batch_y[index] = [0, 1]
 
                         else:
                             pair_ids = np.random.choice(n_ids, 2, replace=False)
@@ -52,7 +52,7 @@ class ReidGenerator():
 
                             batch_x_1[index] = db[self.flag][str(pair_ids[0])][pair_a]
                             batch_x_2[index] = db[self.flag][str(pair_ids[1])][pair_b]
-                            batch_y[index] = 0
+                            batch_y[index] = [1, 0]
 
                 elif self.flag == "validation":
                     for index in range(self.batch_size):
@@ -65,7 +65,7 @@ class ReidGenerator():
                         batch_x_2[index] = db[self.flag][str(pair_ids[1])][pair_b]
 
                         label = (pair_a == pair_b)
-                        batch_y[index] = label
+                        batch_y[index] = [(not label), label]
 
                 return [batch_x_1, batch_x_2], batch_y
 
