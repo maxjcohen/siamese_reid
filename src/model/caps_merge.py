@@ -3,7 +3,7 @@ from keras import layers, models, optimizers
 from keras import backend as K
 from keras.utils import to_categorical
 from keras.models import Model, Sequential
-from keras.layers import Input, Flatten, Dense, Dropout, Lambda, Reshape, BatchNormalization, Activation
+from keras.layers import Input, Flatten, Dense, Dropout, Lambda, Reshape, BatchNormalization, Activation, Concatenate
 from keras.layers.convolutional import Conv2D, MaxPooling2D
 from keras.layers import Lambda
 from keras.optimizers import RMSprop, SGD, Adam
@@ -39,14 +39,21 @@ def generate_model(input_shape=(28, 28, 1)):
         x2 = layers.Input(shape=input_shape)
 
         out1 = base_network(x1)
-        out1 = Reshape((10*16,)) (out1)
+        # out1 = Reshape((10*16,)) (out1)
 
         out2 = base_network(x2)
-        out2 = Reshape((10*16,)) (out2)
+        # out2 = Reshape((10*16,)) (out2)
 
-        distance = Lambda(euclidean_distance)([out1, out2])
+        merged = Concatenate() ([output_a, output_b])
+        merged = Reshape((10*32,)) (merged)
+        merged = Dropout(0.3) (merged)
 
-        reid_network = Model([x1, x2], distance)
+        merged = Dense(500, activation="relu") (merged)
+        merged = Dropout(0.3) (merged)
+
+        output = Dense(2, activation="softmax") (merged)
+
+        reid_network = Model([x1, x2], output)
 
         # Decoder
         decoder = Sequential([
@@ -88,6 +95,6 @@ def generate_model(input_shape=(28, 28, 1)):
 
     # Reid network
     rms = RMSprop()
-    reid_network.compile(loss=contrastive_loss, optimizer=rms, metrics=[f1score])
+    reid_network.compile(loss="categorical_crossentropy", optimizer=rms, metrics=[f1score])
 
     return reid_network, feature_network
