@@ -39,12 +39,9 @@ def generate_model(input_shape=(28, 28, 1)):
         x2 = layers.Input(shape=input_shape)
 
         out1 = base_network(x1)
-        # out1 = Reshape((10*16,)) (out1)
-
         out2 = base_network(x2)
-        # out2 = Reshape((10*16,)) (out2)
 
-        merged = Concatenate() ([output_a, output_b])
+        merged = Concatenate() ([out1, out2])
         merged = Reshape((10*32,)) (merged)
         merged = Dropout(0.3) (merged)
 
