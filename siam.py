@@ -5,8 +5,8 @@ import threading
 
 import numpy as np
 
-# from src.model.caps_merge import generate_model
-from src.model.cnn_merge import generate_model
+from src.model.caps_merge import generate_model
+# from src.model.cnn_merge import generate_model
 from src.train import train_model
 from src.test import cmc, test
 from src.generator import ReidGenerator, testGenerator, featureGenerator
