@@ -15,27 +15,27 @@ def generate_model(input_shape=(160, 60, 3)):
     def buildNetwork(input_shape):
 
         base_network = Sequential([
-            Convolution2D(4, kernel_size=3, padding="same", input_shape=input_shape),
+            Convolution2D(4, kernel_size=6, padding="same", input_shape=input_shape),
             BatchNormalization(),
             Activation("relu"),
             MaxPooling2D(strides=2),
 
-            Dropout(0.1),
+            Dropout(0.3),
 
             Convolution2D(8, kernel_size=3, padding="same"),
             BatchNormalization(),
             Activation("relu"),
             MaxPooling2D(strides=2),
 
-            Dropout(0.1),
+            Dropout(0.3),
 
             Convolution2D(16, kernel_size=3, padding="same"),
             BatchNormalization(),
             Activation("relu"),
             MaxPooling2D(strides=2),
 
-            Dropout(0.1),
-            
+            Dropout(0.3),
+
             Flatten(),
             Dense(256, activation="relu"),
         ])
