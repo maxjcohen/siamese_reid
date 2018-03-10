@@ -22,8 +22,22 @@ def generate_model(input_shape=(160, 60, 3)):
 
             Dropout(0.1),
 
+            Convolution2D(8, kernel_size=3, padding="same"),
+            BatchNormalization(),
+            Activation("relu"),
+            MaxPooling2D(strides=2),
+
+            Dropout(0.1),
+
+            Convolution2D(16, kernel_size=3, padding="same"),
+            BatchNormalization(),
+            Activation("relu"),
+            MaxPooling2D(strides=2),
+
+            Dropout(0.1),
+            
             Flatten(),
-            Dense(128, activation="relu"),
+            Dense(256, activation="relu"),
         ])
 
         input_a = Input(shape=input_shape)
@@ -33,7 +47,7 @@ def generate_model(input_shape=(160, 60, 3)):
         output_b = base_network(input_b)
 
         merged = Concatenate() ([output_a, output_b])
-        merged = Dense(64, activation="relu") (merged)
+        merged = Dense(128, activation="relu") (merged)
         output = Dense(2, activation="softmax") (merged)
 
         return Model([input_a, input_b], output)
