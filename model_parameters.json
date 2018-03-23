@@ -1,4 +1,5 @@
 {
+    "model_name": "cnn_distance",
     "weights_file": "weights_01_0.50.hdf5",
     "dataset_path": "mnist.h5",
     "input_shape": [28, 28, 1],

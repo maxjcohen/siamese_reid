@@ -2,10 +2,11 @@ from __future__ import division, print_function
 
 import os
 import threading
+import importlib
 
 import numpy as np
 
-from src.model.caps_merge import generate_model
+# from src.model.caps_merge import generate_model
 # from src.model.cnn_merge import generate_model
 from src.train import train_model
 from src.test import cmc, test
@@ -69,9 +70,11 @@ class ReID:
         self.epochs = self.model_data["epochs"]
         self.validation_steps = self.model_data["validation_steps"]
         self.weights_file = self.model_data["weights_file"]
+        self.model_name = self.model_data["model_name"]
 
     def __generateNetwork(self):
-        networks = generate_model(input_shape=self.input_shape)
+        modellib = importlib.import_module("src.model." + self.model_name)
+        networks = modellib.generate_model(input_shape=self.input_shape)
 
         if len(networks) == 2:
             log("Detected 2 networks, will pretrain", "info")
