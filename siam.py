@@ -74,7 +74,7 @@ class ReID:
 
     def __generateNetwork(self):
         modellib = importlib.import_module("src.model." + self.model_name)
-        networks = modellib.generate_model(input_shape=self.input_shape)
+        networks = modellib.generate_model(input_shape=self.input_shape, lr=0.0003)
 
         if len(networks) == 2:
             log("Detected 2 networks, will pretrain", "info")
