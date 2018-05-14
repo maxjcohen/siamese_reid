@@ -88,10 +88,10 @@ def generate_model(input_shape=(28, 28, 1), lr=0.001):
     reid_network, feature_network = buildNetwork(input_shape=input_shape)
 
     # Feature network
-    feature_network.compile(optimizer=Adam(lr=lr), loss=[margin_loss])
+    feature_network.compile(optimizer=SGD(lr=0.001), loss=[margin_loss])
 
     # Reid network
-    rms = RMSprop(lr=lr)
-    reid_network.compile(loss="categorical_crossentropy", optimizer=rms, metrics=[f1score])
+    opt = SGD(lr=lr)
+    reid_network.compile(loss="categorical_crossentropy", optimizer=opt, metrics=[f1score])
 
     return reid_network, feature_network
