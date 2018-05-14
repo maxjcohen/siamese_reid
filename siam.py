@@ -71,10 +71,11 @@ class ReID:
         self.validation_steps = self.model_data["validation_steps"]
         self.weights_file = self.model_data["weights_file"]
         self.model_name = self.model_data["model_name"]
+        self.lr = self.model_data["lr"]
 
     def __generateNetwork(self):
         modellib = importlib.import_module("src.model." + self.model_name)
-        networks = modellib.generate_model(input_shape=self.input_shape, lr=0.0003)
+        networks = modellib.generate_model(input_shape=self.input_shape, lr=self.lr)
 
         if len(networks) == 2:
             log("Detected 2 networks, will pretrain", "info")

@@ -5,6 +5,7 @@
     "input_shape": [28, 28, 1],
 
     "batch_size": 64,
+    "lr": 0.001,
     "steps_per_epoch": 1000,
     "epochs": 1,
     "validation_steps": 150
