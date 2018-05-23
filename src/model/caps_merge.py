@@ -88,7 +88,7 @@ def generate_model(input_shape=(28, 28, 1), lr=0.001, feature=False):
     reid_network, feature_network = buildNetwork(input_shape=input_shape)
 
     # Feature network
-    feature_network.compile(optimizer=Adam(lr=0.003), loss=[margin_loss])
+    feature_network.compile(optimizer=Adam(lr=0.0003), loss=[margin_loss])
 
     # Reid network
     opt = SGD(lr=lr)
