@@ -22,7 +22,6 @@ class ReID:
         self.reid_network = None
 
         self.feature_network = None
-        self.pretrain = False
 
         self.b_no_ui = b_no_ui
 
@@ -47,7 +46,7 @@ class ReID:
         # Train
         pretrain = False
         if b_pretrain_model:
-            self.pretrain()
+            self.pretrain_network()
             pretrain = True
 
         if b_train_model:
@@ -88,7 +87,7 @@ class ReID:
             plot.showPlot()
 
 
-    def pretrain(self):
+    def pretrain_network(self):
 
         modellib = importlib.import_module("src.model." + self.model_name)
         reid_network, feature_network = modellib.generate_model(input_shape=self.input_shape, lr=self.lr, feature=True)
