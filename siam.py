@@ -33,6 +33,7 @@ class ReID:
 
     def run(self,
             b_load_weights=False,
+            b_pretrain_model=False,
             b_train_model=False,
             b_test_model=False,
             b_lc=False):
