@@ -44,10 +44,13 @@ class ReID:
             self.loadWeights()
 
         # Train
+        pretrain = False
+        if b_pretrain_model:
+            self.pretrain()
+            pretrain = True
+
         if b_train_model:
-            if self.pretrain:
-                self.train("feature")
-            self.train("reid")
+            self.train(pretrain)
 
         # Test
         if b_test_model:
@@ -75,69 +78,65 @@ class ReID:
 
     def __generateNetwork(self):
         modellib = importlib.import_module("src.model." + self.model_name)
-        networks = modellib.generate_model(input_shape=self.input_shape, lr=self.lr)
+        self.reid_network = modellib.generate_model(input_shape=self.input_shape, lr=self.lr, feature=False)
 
-        if len(networks) == 2:
-            log("Detected 2 networks, will pretrain", "info")
-            self.reid_network, self.feature_network = networks
-            self.pretrain = True;
-        elif len(networks) == 1:
-            log("Detected 1 network", "info")
-            self.reid_network = networks[0]
-        else:
-            log("Detected {} networks, aborting".format(len(networks)), "error")
-            exit(101)
         log("Model generated")
 
     def showPlot(self):
         if not self.b_no_ui:
             plot.showPlot()
 
-    def train(self, flag="reid"):
 
-        if flag == "feature":
-            generator_train = featureGenerator(
-                                database=self.dataset,
-                                batch_size=self.batch_size,
-                                flag="train" )
-            generator_val = featureGenerator(
-                                database=self.dataset,
-                                batch_size=self.batch_size,
-                                flag="validation" )
+    def pretrain(self):
 
-            log("Training [features]")
-            train_model(self.feature_network,
-                        generator_train=generator_train,
-                        generator_val=generator_train,
-                        batch_size=self.batch_size,
-                        steps_per_epoch=self.steps_per_epoch,
-                        epochs=self.epochs,
-                        validation_steps=self.validation_steps,
-                        plot_title="loss [feature training]")
+        modellib = importlib.import_module("src.model." + self.model_name)
+        reid_network, feature_network = modellib.generate_model(input_shape=self.input_shape, lr=self.lr, feature=True)
 
-        elif flag == "reid":
-            generator_train = ReidGenerator(
-                                database=self.dataset,
-                                batch_size=self.batch_size,
-                                flag="train",
-                                p=0.33)
-            generator_val = ReidGenerator(
-                                database=self.dataset,
-                                batch_size=self.batch_size,
-                                flag="validation")
+        generator_train = featureGenerator(
+                            database=self.dataset,
+                            batch_size=self.batch_size,
+                            flag="train" )
+        generator_val = featureGenerator(
+                            database=self.dataset,
+                            batch_size=self.batch_size,
+                            flag="validation" )
 
-            log("Training [reid]")
-            train_model(self.reid_network,
-                        generator_train=generator_train,
-                        generator_val=generator_val,
-                        batch_size=self.batch_size,
-                        steps_per_epoch=self.steps_per_epoch,
-                        epochs=self.epochs,
-                        validation_steps=self.validation_steps,
-                        plot_title="loss [reid training]")
-        else:
-            log('flag "{}" not understood'.format(flag), "error")
-            raise ValueError('flag "{}" not understood'.format(flag))
+        log("Training [features]")
+        train_model(feature_network,
+                    generator_train=generator_train,
+                    generator_val=generator_train,
+                    batch_size=self.batch_size,
+                    steps_per_epoch=self.steps_per_epoch,
+                    epochs=self.epochs,
+                    validation_steps=self.validation_steps,
+                    plot_title="loss [feature training]")
+
+        reid_network.save_weights("pretrain.h5")
+
+    def train(self, pretrain=False):
+        if pretrain:
+            self.reid_network.load_weights("pretrain.h5")
+            log("Loaded pretrain weights")
+
+        generator_train = ReidGenerator(
+                            database=self.dataset,
+                            batch_size=self.batch_size,
+                            flag="train",
+                            p=0.33)
+        generator_val = ReidGenerator(
+                            database=self.dataset,
+                            batch_size=self.batch_size,
+                            flag="validation")
+
+        log("Training [reid]")
+        train_model(self.reid_network,
+                    generator_train=generator_train,
+                    generator_val=generator_val,
+                    batch_size=self.batch_size,
+                    steps_per_epoch=self.steps_per_epoch,
+                    epochs=self.epochs,
+                    validation_steps=self.validation_steps,
+                    plot_title="loss [reid training]")
 
     def test(self):
         generator_test = testGenerator(database=self.dataset)

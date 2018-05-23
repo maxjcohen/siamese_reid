@@ -14,6 +14,7 @@ def parse_args():
     parser.add_argument('--lc', action='store_true', help='Run learning curve.')
     parser.add_argument('--load_weights', action='store_true', help='Loads weights.')
     parser.add_argument('--train', action='store_true', help='Trains the network.')
+    parser.add_argument('--pretrain', action='store_true', help='Pretrains the network.')
     parser.add_argument('--test', action='store_true', help='Test the network.')
     parser.add_argument('--no_ui', action='store_true', help='No graphic interface.')
     return parser.parse_args()
@@ -37,6 +38,7 @@ if __name__ == '__main__':
     model = siam.ReID(model_data, b_no_ui=args.no_ui)
     model.run(
         b_load_weights=args.load_weights,
+        b_pretrain_model=args.pretrain,
         b_train_model=args.train,
         b_test_model=args.test,
         b_lc=args.lc)

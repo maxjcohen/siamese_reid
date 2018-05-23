@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 from PIL import Image
 from src.model.capsulelayers import CapsuleLayer, PrimaryCap, Length, Mask
 
-def generate_model(input_shape=(28, 28, 1), lr=0.001):
+def generate_model(input_shape=(28, 28, 1), lr=0.001, feature=False):
 
     def buildNetwork(input_shape=(28, 28, 1)):
         def euclidean_distance(vects):
@@ -94,4 +94,7 @@ def generate_model(input_shape=(28, 28, 1), lr=0.001):
     opt = SGD(lr=lr)
     reid_network.compile(loss="categorical_crossentropy", optimizer=opt, metrics=[f1score])
 
-    return reid_network, feature_network
+    if feature:
+        return reid_network, feature_network
+    else:
+        return reid_network
